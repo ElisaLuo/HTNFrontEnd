@@ -12,7 +12,7 @@ import {
 
 export default class AddAllergy extends Component {
   state = {
-    tasks: [""],
+    tasks: [],
     text: "",
     strTask:""
   };
@@ -113,7 +113,7 @@ export default class AddAllergy extends Component {
           onChangeText={this.changeTextHandler}
           onSubmitEditing={this.addTask}
           value={this.state.text}
-          placeholder="Add Tasks"
+          placeholder="Add Allergy"
           returnKeyType="done"
           returnKeyLabel="done"
         />
@@ -157,7 +157,9 @@ let Tasks = {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 20
+    paddingTop: 50,
+    paddingLeft: 30,
+    paddingRight: 30
   },
   listItem: {
     fontSize: 18
@@ -166,11 +168,16 @@ const styles = StyleSheet.create({
     height: 1,
   },
   listItemCont: {
+    paddingLeft: 20,
+    paddingRight: 20,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between"
   },
   textInput: {
-      paddingTop: 30
+      paddingTop: 30,
+      paddingBottom: 10,
+      borderBottomWidth: 2,
+      borderBottomColor: "blue"
   }
 });

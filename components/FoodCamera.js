@@ -4,6 +4,7 @@ import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
 import * as FileSystem from 'expo-file-system';
+import { TouchableHighlight } from 'react-native-gesture-handler';
 
 export default class FoodCamera extends React.Component {
   state = {
@@ -11,7 +12,8 @@ export default class FoodCamera extends React.Component {
     response: null,
     uploading: false,
     baseImage: null,
-    allergies: []
+    allergies: "",
+    results: {}
   };
 
   render() {
@@ -27,6 +29,15 @@ export default class FoodCamera extends React.Component {
         {image &&
           <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
         <Button onPress={this._submitToGoogle} title="Get Name" />
+        {
+          Object.keys(this.state.results).map((food, val) => {
+            console.log(food + " " + val);
+            console.log(this.state.results[food]);
+            return(
+              <Text> {food} confidence value - {this.state.results[food]*100}% </Text>
+            )
+          })
+        }
       </View>
     );
   }
@@ -50,7 +61,7 @@ export default class FoodCamera extends React.Component {
       allowsEditing: true,
       aspect: [4, 3]
     });
-
+    console.log(this.state.allergies);
     const base64 = await FileSystem.readAsStringAsync(pickerResult.uri,{encoding:'base64'});
     this.setState({baseImage: base64})
 
@@ -114,22 +125,22 @@ export default class FoodCamera extends React.Component {
             uploading: false,
             response: responseJson.responses[0].webDetection.webEntities[0].description
         });
-        /* alert(this.state.response.responses[0].webEntities[0].description); */
-        /* fetch(`http://10.33.141.72:42069/${this.state.response}/cheese`)
+        console.log(this.state.response);
+        console.log(this.state.allergies);
+        fetch(`http://10.33.141.72:42069/${this.state.response}`)
         .then((response) => response.json())
         .then((responseJson) =>{
           this.setState({
-            allergies: responseJson
+            results: responseJson //{Apple: 0, Orange: 0.04, Peanuts: 0, Potato: 0.02}
           }, function(){
-            alert(this.state.response);
-            alert(this.state.allergies.cheese);
+            console.log(this.state.results)
           })
         })
         .catch(err=>{
-          alert(err);
-        }) */
+          alert("fetch" + err);
+        })
     } catch(error){
-        alert(error);
+        alert("eeor" +error);
     }
   }
 }
