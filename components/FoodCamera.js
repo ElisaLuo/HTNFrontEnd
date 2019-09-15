@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Button, Image, View, FlatList } from 'react-native';
+import { Button, Image, View, FlatList, Text } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
@@ -10,7 +10,8 @@ export default class FoodCamera extends React.Component {
     image: null,
     response: null,
     uploading: false,
-    baseImage: null
+    baseImage: null,
+    allergies: []
   };
 
   render() {
@@ -108,13 +109,25 @@ export default class FoodCamera extends React.Component {
             body: body
         });
         let responseJson = await response.json();
-        alert(responseJson.responses[0].webDetection.webEntities[0].description);
+        //alert();
         this.setState({
             uploading: false,
-            response: responseJson
+            response: responseJson.responses[0].webDetection.webEntities[0].description
         });
         /* alert(this.state.response.responses[0].webEntities[0].description); */
-        ;
+        /* fetch(`http://10.33.141.72:42069/${this.state.response}/cheese`)
+        .then((response) => response.json())
+        .then((responseJson) =>{
+          this.setState({
+            allergies: responseJson
+          }, function(){
+            alert(this.state.response);
+            alert(this.state.allergies.cheese);
+          })
+        })
+        .catch(err=>{
+          alert(err);
+        }) */
     } catch(error){
         alert(error);
     }

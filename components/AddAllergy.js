@@ -10,15 +10,59 @@ import {
   TextInput
 } from "react-native";
 
-export default class TodoList extends Component {
+export default class AddAllergy extends Component {
   state = {
-    tasks: [],
-    text: ""
+    tasks: [""],
+    text: "",
+    strTask:""
   };
 
   changeTextHandler = text => {
     this.setState({ text: text });
   };
+
+   addPropStrTask = () => {
+    var res = "";
+    for(var i = 0; i < this.state.tasks.length; i++) {
+        res += this.state.tasks[i].text;
+        if(i != this.state.tasks.length-1) {
+            res += ",";
+        }
+    }
+    res += ","+this.state.text;
+    this.setState({
+        strTask: res
+    });
+    fetch(`http://10.33.141.72:42069/updRestrictions/${res}`)
+        .then((response) => response.json())
+        .then((responseJson) =>{
+          this.setState({
+          }, function(){
+          })
+        })
+  }
+
+  deletePropStrTask = (j) => {
+    var res = "";
+    for(var i = 0; i < this.state.tasks.length; i++) {
+        res += this.state.tasks[i].text;
+        if(i != this.state.tasks.length-1) {
+            res += ",";
+        }
+    }
+    res = res.split(","+this.state.tasks[j].text).join("");
+    console.log(res);
+    this.setState({
+        strTask: res
+    });
+    fetch(`http://10.33.141.72:42069/updRestrictions/${res}`)
+        .then((response) => response.json())
+        .then((responseJson) =>{
+          this.setState({
+          }, function(){
+          })
+        })
+  }
 
   addTask = () => {
     let notEmpty = this.state.text.trim().length > 0;
@@ -37,6 +81,7 @@ export default class TodoList extends Component {
         () => Tasks.save(this.state.tasks)
       );
     }
+    this.addPropStrTask();
   };
 
   deleteTask = i => {
@@ -48,10 +93,14 @@ export default class TodoList extends Component {
       },
       () => Tasks.save(this.state.tasks)
     );
+    this.deletePropStrTask(i);
+    //console.log(this.state.strTask);
   };
 
   componentDidMount() {
-    Tasks.all(tasks => this.setState({ tasks: tasks || [] }));
+    Tasks.all(tasks => {
+        this.setState({ tasks: tasks || [] });
+    });
   }
 
   render() {
@@ -82,7 +131,6 @@ export default class TodoList extends Component {
               <View style={styles.hr} />
             </View>}
         />
-        
       </View>
     );
   }
@@ -121,5 +169,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between"
+  },
+  textInput: {
+      paddingTop: 30
   }
 });
