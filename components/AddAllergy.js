@@ -113,7 +113,7 @@ export default class AddAllergy extends Component {
           onChangeText={this.changeTextHandler}
           onSubmitEditing={this.addTask}
           value={this.state.text}
-          placeholder="Add Allergy"
+          placeholder="Add Restriction"
           returnKeyType="done"
           returnKeyLabel="done"
         />
@@ -157,7 +157,7 @@ let Tasks = {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 50,
+    paddingTop: 30,
     paddingLeft: 30,
     paddingRight: 30
   },
@@ -178,6 +178,6 @@ const styles = StyleSheet.create({
       paddingTop: 30,
       paddingBottom: 10,
       borderBottomWidth: 2,
-      borderBottomColor: "blue"
+      borderBottomColor: "#60B0F4"
   }
 });
